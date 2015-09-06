@@ -33,6 +33,6 @@ main(int argc, char *argv[])
 
 	std::cout << "Tokens parsed:" << std::endl;
 	for(Token *t : tokens) {
-		std::cout << t->getTypeName() << ": " << t->getContents() << std::endl;
+		std::cout << t->getContents() << "\t(" << t->getTypeName() << ")" << std::endl;
 	}
 }
