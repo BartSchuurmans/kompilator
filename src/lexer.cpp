@@ -12,6 +12,11 @@ enum CharacterType {
 	CURLY_BRACKET_OPEN,
 	CURLY_BRACKET_CLOSE,
 	SEMICOLON,
+	EQUALS,
+	COMMA,
+	FORWARD_SLASH,
+	SQUARE_BRACKET_OPEN,
+	SQUARE_BRACKET_CLOSE,
 };
 
 CharacterType
@@ -34,6 +39,16 @@ getCharacterType(char c)
 			return CharacterType::CURLY_BRACKET_CLOSE;
 		case ';':
 			return CharacterType::SEMICOLON;
+		case '=':
+			return CharacterType::EQUALS;
+		case '[':
+			return CharacterType::SQUARE_BRACKET_OPEN;
+		case ']':
+			return CharacterType::SQUARE_BRACKET_CLOSE;
+		case ',':
+			return CharacterType::COMMA;
+		case '/':
+			return CharacterType::FORWARD_SLASH;
 		case ' ':
 		case '\t':
 		case '\n':
@@ -116,6 +131,21 @@ tokenize(std::istream &input)
 				break;
 			case CharacterType::SEMICOLON:
 				currentToken = new Token(Token::Type::SEMICOLON, line, pos, c);
+				break;
+			case CharacterType::EQUALS:
+				currentToken = new Token(Token::Type::EQUALS, line, pos, c);
+				break;
+			case CharacterType::SQUARE_BRACKET_OPEN:
+				currentToken = new Token(Token::Type::SQUARE_BRACKET_OPEN, line, pos, c);
+				break;
+			case CharacterType::SQUARE_BRACKET_CLOSE:
+				currentToken = new Token(Token::Type::SQUARE_BRACKET_CLOSE, line, pos, c);
+				break;
+			case CharacterType::COMMA:
+				currentToken = new Token(Token::Type::COMMA, line, pos, c);
+				break;
+			case CharacterType::FORWARD_SLASH:
+				currentToken = new Token(Token::Type::FORWARD_SLASH, line, pos, c);
 				break;
 			case CharacterType::OTHER:
 			default:

@@ -32,6 +32,11 @@ Token::getTypeName()
 		case CURLY_BRACKET_OPEN:	return "CURLY_BRACKET_OPEN";
 		case CURLY_BRACKET_CLOSE:	return "CURLY_BRACKET_CLOSE";
 		case SEMICOLON:				return "SEMICOLON";
+		case EQUALS:				return "EQUALS";
+		case SQUARE_BRACKET_OPEN:	return "SQUARE_BRACKET_OPEN";
+		case SQUARE_BRACKET_CLOSE:	return "SQUARE_BRACKET_CLOSE";
+		case COMMA:					return "COMMA";
+		case FORWARD_SLASH:			return "FORWARD_SLASH";
 	}
 }
 
