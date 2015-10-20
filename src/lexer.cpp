@@ -1,157 +1,158 @@
 #include <vector>
 #include "lexer.hpp"
 
-enum CharacterType {
-	OTHER,
-	DIGIT,
-	ALPHA,
-	WHITESPACE,
-	UNDERSCORE,
-	ROUND_BRACKET_OPEN,
-	ROUND_BRACKET_CLOSE,
-	CURLY_BRACKET_OPEN,
-	CURLY_BRACKET_CLOSE,
-	SEMICOLON,
-	EQUALS,
-	COMMA,
-	FORWARD_SLASH,
-	SQUARE_BRACKET_OPEN,
-	SQUARE_BRACKET_CLOSE,
-};
-
-CharacterType
-getCharacterType(char c)
+character_type
+get_character_type(char c)
 {
-	if(c >= '0' && c <= '9') {
-		return CharacterType::DIGIT;
+	if(c >= 'A' && c <= 'Z') {
+		return character_type::UPPER_ALPHA;
 	}
-	if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-		return CharacterType::ALPHA;
+	if(c >= 'a' && c <= 'z') {
+		return character_type::LOWER_ALPHA;
+	}
+	if(c >= '0' && c <= '9') {
+		return character_type::DIGIT;
 	}
 	switch(c) {
 		case '(':
-			return CharacterType::ROUND_BRACKET_OPEN;
 		case ')':
-			return CharacterType::ROUND_BRACKET_CLOSE;
 		case '{':
-			return CharacterType::CURLY_BRACKET_OPEN;
 		case '}':
-			return CharacterType::CURLY_BRACKET_CLOSE;
 		case ';':
-			return CharacterType::SEMICOLON;
 		case '=':
-			return CharacterType::EQUALS;
 		case '[':
-			return CharacterType::SQUARE_BRACKET_OPEN;
 		case ']':
-			return CharacterType::SQUARE_BRACKET_CLOSE;
 		case ',':
-			return CharacterType::COMMA;
 		case '/':
-			return CharacterType::FORWARD_SLASH;
+			return character_type::SINGLE_SYMBOL;
+		case '<':
+		case '>':
+			return character_type::MAYBE_MULTIPLE_SYMBOL;
 		case ' ':
 		case '\t':
 		case '\n':
-			return CharacterType::WHITESPACE;
+			return character_type::WHITESPACE;
 		default:
-			return CharacterType::OTHER;
+			return character_type::OTHER;
 	}
 }
-	
 
-std::vector<Token *>
+bool
+lexer_state::get_character(char &c)
+{
+	input->get(c);
+	if(!input) {
+		return false;
+	}
+
+	// Update line/column
+	if(c == '\n') {
+		line++;
+		pos = 0;
+	} else {
+		pos++;
+	}
+
+	return true;
+}
+
+std::vector<token *>
 tokenize(std::istream &input)
 {
-	auto output = std::vector<Token *>();
-
-	int line = 1;
-	int pos = -1;
+	auto state = lexer_state(&input);
+	auto output = std::vector<token *>();
 
 	char c;
-	Token *currentToken = nullptr;
+	token *tok = nullptr;
 	while(input.get(c)) {
-		// Update line/column
-		if(c == '\n') {
-			line++;
-			pos = 0;
-		} else {
-			pos++;
-		}
 
-		CharacterType type = getCharacterType(c);
-		if(currentToken != nullptr) {
-			// Character might continue current token
-			switch(currentToken->type) {
-				case Token::Type::WORD:
-					switch(type) {
-						case CharacterType::ALPHA:
-						case CharacterType::DIGIT:
-						case CharacterType::UNDERSCORE:
-							currentToken->addCharacter(c);
-							continue;
-						default:
-							// Doesn't match
-							break;
-					}
-					break;
-				case Token::Type::WHITESPACE:
-					if(type == CharacterType::WHITESPACE) {
-						currentToken->addCharacter(c);
-						continue;
-					}
-					break;
-				default:
-					// Token can not be elongated
-					break;
-			}
-			// Character could not be added to current token
-			currentToken = nullptr;
-		}
+		character_type t = get_character_type(c);
 
-		// Start new token based on character type
-		switch(type) {
-			case CharacterType::ALPHA:
-			case CharacterType::DIGIT:
-				currentToken = new Token(Token::Type::WORD, line, pos, c);
+retry:
+		switch(state.current_state) {
+			case state_type::START:
+				// Start new token with first character
+				tok = new token(state.line, state.pos, c);
+				output.push_back(tok);
+				switch(t) {
+					case character_type::LOWER_ALPHA:
+					case character_type::UPPER_ALPHA:
+						tok->type = token_type::WORD;
+						state.current_state = state_type::WORD;
+						break;
+					case character_type::DIGIT:
+						tok->type = token_type::NUMBER;
+						state.current_state = state_type::DIGIT;
+						break;
+					case character_type::MAYBE_MULTIPLE_SYMBOL:
+						state.current_state = state_type::MAYBE_MULTIPLE_SYMBOL;
+						break;
+					case character_type::SINGLE_SYMBOL:
+						switch(c) {
+							case '(': tok->type = token_type::ROUND_BRACKET_OPEN; break;
+							case ')': tok->type = token_type::ROUND_BRACKET_CLOSE; break;
+							case '{':
+							case '}':
+							case ';':
+							case '=':
+							case '[':
+							case ']':
+							case ',':
+							case '/':
+								break;
+						}
+						tok = nullptr;
+						break;
+					case character_type::WHITESPACE:
+						break;
+					case character_type::OTHER:
+						break;
+				}
 				break;
-			case CharacterType::WHITESPACE:
-				currentToken = new Token(Token::Type::WHITESPACE, line, pos, c);
+			case state_type::WORD:
+				switch(t) {
+					case character_type::LOWER_ALPHA:
+					case character_type::UPPER_ALPHA:
+					case character_type::DIGIT:
+						tok->add_character(c);
+						break;
+					default:
+						state.current_state = state_type::START;
+						goto retry;
+				}
 				break;
-			case CharacterType::ROUND_BRACKET_OPEN:
-				currentToken = new Token(Token::Type::ROUND_BRACKET_OPEN, line, pos, c);
+			case state_type::DIGIT:
+				switch(t) {
+					case character_type::DIGIT:
+						tok->add_character(c);
+						break;
+					default:
+						state.current_state = state_type::START;
+						goto retry;
+				}
 				break;
-			case CharacterType::ROUND_BRACKET_CLOSE:
-				currentToken = new Token(Token::Type::ROUND_BRACKET_CLOSE, line, pos, c);
+			case state_type::MAYBE_MULTIPLE_SYMBOL:
+				switch(c) {
+					case '=':
+						switch(tok->characters.front()) {
+							case '<':
+								tok->type = token_type::LESS_THAN_EQUALS;
+								tok = nullptr;
+								break;
+							case '>':
+								tok->type = token_type::GREATER_THAN_EQUALS;
+								tok = nullptr;
+								break;
+							default:
+								state.current_state = state_type::START;
+								goto retry;
+						}
+					default:
+						state.current_state = state_type::START;
+						goto retry;
+				}
 				break;
-			case CharacterType::CURLY_BRACKET_OPEN:
-				currentToken = new Token(Token::Type::CURLY_BRACKET_OPEN, line, pos, c);
-				break;
-			case CharacterType::CURLY_BRACKET_CLOSE:
-				currentToken = new Token(Token::Type::CURLY_BRACKET_CLOSE, line, pos, c);
-				break;
-			case CharacterType::SEMICOLON:
-				currentToken = new Token(Token::Type::SEMICOLON, line, pos, c);
-				break;
-			case CharacterType::EQUALS:
-				currentToken = new Token(Token::Type::EQUALS, line, pos, c);
-				break;
-			case CharacterType::SQUARE_BRACKET_OPEN:
-				currentToken = new Token(Token::Type::SQUARE_BRACKET_OPEN, line, pos, c);
-				break;
-			case CharacterType::SQUARE_BRACKET_CLOSE:
-				currentToken = new Token(Token::Type::SQUARE_BRACKET_CLOSE, line, pos, c);
-				break;
-			case CharacterType::COMMA:
-				currentToken = new Token(Token::Type::COMMA, line, pos, c);
-				break;
-			case CharacterType::FORWARD_SLASH:
-				currentToken = new Token(Token::Type::FORWARD_SLASH, line, pos, c);
-				break;
-			case CharacterType::OTHER:
-			default:
-				throw TokenizeError(line, pos, c);
 		}
-		output.push_back(currentToken);
 	}
 
 	return output;

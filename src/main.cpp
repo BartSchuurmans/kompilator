@@ -21,18 +21,18 @@ main(int argc, char *argv[])
 		usage(argv[0]);
 	}
 
-	std::ifstream sourceFile(argv[1], std::ifstream::in);
+	std::ifstream source_file(argv[1], std::ifstream::in);
 
-	std::vector<Token *> tokens;
+	std::vector<token *> tokens;
 	try {
-		tokens = tokenize(sourceFile);
-	} catch(const TokenizeError &e) {
+		tokens = tokenize(source_file);
+	} catch(const tokenize_error &e) {
 		std::cerr << e.what() << std::endl;
 		exit(1);
 	}
 
 	std::cout << "Tokens parsed:" << std::endl;
-	for(Token *t : tokens) {
-		std::cout << t->getContents() << "\t(" << t->getTypeName() << ")" << std::endl;
+	for(token *t : tokens) {
+		std::cout << "'" << t->get_contents() << "'" << "\t(" << t->get_type_name() << ")" << std::endl;
 	}
 }

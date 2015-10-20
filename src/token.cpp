@@ -1,47 +1,37 @@
 #include <vector>
 #include "token.hpp"
 
-Token::Token(Token::Type type, int line, int pos)
-	: type(type)
-	, line(line)
+token::token(int line, int pos)
+	: line(line)
 	, pos(pos)
-	, characters(std::vector<char>())
+	, characters()
 {
 }
 
-Token::Token(Token::Type type, int line, int pos, char c)
-	: Token(type, line, pos)
+token::token(int line, int pos, char c)
+	: token(line, pos)
 {
-	addCharacter(c);
+	add_character(c);
 }
 
 void
-Token::addCharacter(char c)
+token::add_character(char c)
 {
 	characters.push_back(c);
 }
 
 std::string
-Token::getTypeName()
+token::get_contents()
 {
-	switch(type) {
-		case WORD:					return "WORD";
-		case WHITESPACE:			return "WHITESPACE";
-		case ROUND_BRACKET_OPEN:	return "ROUND_BRACKET_OPEN";
-		case ROUND_BRACKET_CLOSE:	return "ROUND_BRACKET_CLOSE";
-		case CURLY_BRACKET_OPEN:	return "CURLY_BRACKET_OPEN";
-		case CURLY_BRACKET_CLOSE:	return "CURLY_BRACKET_CLOSE";
-		case SEMICOLON:				return "SEMICOLON";
-		case EQUALS:				return "EQUALS";
-		case SQUARE_BRACKET_OPEN:	return "SQUARE_BRACKET_OPEN";
-		case SQUARE_BRACKET_CLOSE:	return "SQUARE_BRACKET_CLOSE";
-		case COMMA:					return "COMMA";
-		case FORWARD_SLASH:			return "FORWARD_SLASH";
-	}
+	return std::string(characters.begin(), characters.end());
 }
 
 std::string
-Token::getContents()
+token::get_type_name()
 {
-	return std::string(characters.begin(), characters.end());
+	switch(type) {
+		#define DEFINE_SWITCH_CASE(v) case token_type::v: return #v;
+		KOMPILATOR_TOKEN_TYPES(DEFINE_SWITCH_CASE)
+		#undef DEFINE_SWITCH_CASE
+	}
 }
