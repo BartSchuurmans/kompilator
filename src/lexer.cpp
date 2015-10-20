@@ -106,7 +106,7 @@ retry:
 					case character_type::WHITESPACE:
 						break;
 					case character_type::OTHER:
-						break;
+						throw tokenize_error(state.line, state.pos, c);
 				}
 				break;
 			case state_type::WORD:
