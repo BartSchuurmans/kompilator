@@ -24,6 +24,7 @@ get_character_type(char c)
 		case ']':
 		case ',':
 		case '/':
+		case '+':
 			return character_type::SINGLE_SYMBOL;
 		case '<':
 		case '>':
@@ -91,15 +92,15 @@ retry:
 						switch(c) {
 							case '(': tok->type = token_type::ROUND_BRACKET_OPEN; break;
 							case ')': tok->type = token_type::ROUND_BRACKET_CLOSE; break;
-							case '{':
-							case '}':
-							case ';':
-							case '=':
-							case '[':
-							case ']':
-							case ',':
-							case '/':
-								break;
+							case '{': tok->type = token_type::CURLY_BRACKET_OPEN; break;
+							case '}': tok->type = token_type::CURLY_BRACKET_CLOSE; break;
+							case ';': tok->type = token_type::SEMICOLON; break;
+							case '=': tok->type = token_type::EQUALS; break;
+							case '[': tok->type = token_type::SQUARE_BRACKET_OPEN; break;
+							case ']': tok->type = token_type::SQUARE_BRACKET_CLOSE; break;
+							case ',': tok->type = token_type::COMMA; break;
+							case '/': tok->type = token_type::FORWARD_SLASH; break;
+							case '+': tok->type = token_type::PLUS; break;
 						}
 						tok = nullptr;
 						break;
