@@ -2,9 +2,9 @@
 #include "token.hpp"
 
 token::token(int line, int pos)
-	: line(line)
+	: characters()
+	, line(line)
 	, pos(pos)
-	, characters()
 {
 }
 
