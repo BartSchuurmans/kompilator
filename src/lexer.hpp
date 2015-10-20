@@ -22,12 +22,14 @@ enum class state_type {
 };
 
 struct lexer_state {
+private:
 	std::istream *input;
+
+public:
 	int line = 1;
 	int pos = -1;
 	state_type current_state = state_type::START;
 
-public:
 	lexer_state(std::istream *i)
 	: input(i)
 	{

@@ -64,7 +64,7 @@ tokenize(std::istream &input)
 
 	char c;
 	token *tok = nullptr;
-	while(input.get(c)) {
+	while(state.get_character(c)) {
 
 		character_type t = get_character_type(c);
 
