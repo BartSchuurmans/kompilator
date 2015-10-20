@@ -104,6 +104,8 @@ retry:
 						tok = nullptr;
 						break;
 					case character_type::WHITESPACE:
+						tok->type = token_type::WHITESPACE;
+						state.current_state = state_type::WHITESPACE;
 						break;
 					case character_type::OTHER:
 						throw tokenize_error(state.line, state.pos, c);
@@ -147,6 +149,16 @@ retry:
 								state.current_state = state_type::START;
 								goto retry;
 						}
+					default:
+						state.current_state = state_type::START;
+						goto retry;
+				}
+				break;
+			case state_type::WHITESPACE:
+				switch(t) {
+					case character_type::WHITESPACE:
+						tok->add_character(c);
+						break;
 					default:
 						state.current_state = state_type::START;
 						goto retry;

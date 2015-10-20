@@ -18,6 +18,7 @@ enum class state_type {
 	WORD,
 	DIGIT,
 	MAYBE_MULTIPLE_SYMBOL,
+	WHITESPACE,
 };
 
 struct lexer_state {
