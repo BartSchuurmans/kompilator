@@ -21,7 +21,7 @@ enum class state_type {
 	WHITESPACE,
 };
 
-struct lexer_state {
+struct scanner_state {
 private:
 	std::istream *input;
 
@@ -30,7 +30,7 @@ public:
 	int pos = -1;
 	state_type current_state = state_type::START;
 
-	lexer_state(std::istream *i)
+	scanner_state(std::istream *i)
 	: input(i)
 	{
 	}

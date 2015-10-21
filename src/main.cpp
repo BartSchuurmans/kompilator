@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 
-#include "lexer.hpp"
+#include "scanner.hpp"
 
 void
 usage(char *executable)

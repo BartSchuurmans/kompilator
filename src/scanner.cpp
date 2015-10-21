@@ -1,6 +1,6 @@
 #include <vector>
 #include <cassert>
-#include "lexer.hpp"
+#include "scanner.hpp"
 
 character_type
 get_character_type(char c)
@@ -47,7 +47,7 @@ get_character_type(char c)
 }
 
 bool
-lexer_state::get_character(char &c)
+scanner_state::get_character(char &c)
 {
 	input->get(c);
 	if(!input->good()) {
@@ -68,7 +68,7 @@ lexer_state::get_character(char &c)
 std::vector<token *>
 tokenize(std::istream &input)
 {
-	auto state = lexer_state(&input);
+	auto state = scanner_state(&input);
 	auto output = std::vector<token *>();
 
 	char c;
