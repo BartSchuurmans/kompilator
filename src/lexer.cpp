@@ -1,4 +1,5 @@
 #include <vector>
+#include <cassert>
 #include "lexer.hpp"
 
 character_type
@@ -71,16 +72,22 @@ tokenize(std::istream &input)
 
 		character_type t = get_character_type(c);
 
-		#define END_TOKEN \
-			state.current_state = state_type::START; \
-			goto retry
+		auto end_token = [&tok, &state]() {
+			assert(tok->type != token_type::UNKNOWN);
+			tok = nullptr;
+			state.current_state = state_type::START;
+		};
 
-retry:
+retry_character:
+		if(state.current_state == state_type::START) {
+			// Start new token with first character
+			tok = new token(state.line, state.pos, c);
+			output.push_back(tok);
+		} else {
+			assert(tok != nullptr);
+		}
 		switch(state.current_state) {
 			case state_type::START:
-				// Start new token with first character
-				tok = new token(state.line, state.pos, c);
-				output.push_back(tok);
 				switch(t) {
 					case character_type::LOWER_ALPHA:
 					case character_type::UPPER_ALPHA:
@@ -112,7 +119,7 @@ retry:
 							default:
 								throw tokenize_error(state.line, state.pos, c);
 						}
-						tok = nullptr;
+						end_token();
 						break;
 					case character_type::WHITESPACE:
 						tok->type = token_type::WHITESPACE;
@@ -130,7 +137,8 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						END_TOKEN;
+						end_token();
+						goto retry_character;
 				}
 				break;
 			case state_type::DIGIT:
@@ -139,21 +147,24 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						END_TOKEN;
+						end_token();
+						goto retry_character;
 				}
 				break;
 			case state_type::MAYBE_MULTIPLE_SYMBOL:
+				assert(!tok->characters.empty());
 				switch(tok->characters.front()) {
 					case '<':
 						switch(c) {
 							case '=':
 								tok->type = token_type::LESS_THAN_EQUALS;
 								tok->add_character(c);
-								tok = nullptr;
+								end_token();
 								break;
 							default:
 								tok->type = token_type::LESS_THAN;
-								END_TOKEN;
+								end_token();
+								goto retry_character;
 						}
 						break;
 					case '>':
@@ -161,15 +172,17 @@ retry:
 							case '=':
 								tok->type = token_type::GREATER_THAN_EQUALS;
 								tok->add_character(c);
-								tok = nullptr;
+								end_token();
 								break;
 							default:
 								tok->type = token_type::GREATER_THAN;
-								END_TOKEN;
+								end_token();
+								goto retry_character;
 						}
 						break;
 					default:
-						END_TOKEN;
+						end_token();
+						goto retry_character;
 				}
 				break;
 			case state_type::WHITESPACE:
@@ -178,7 +191,8 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						END_TOKEN;
+						end_token();
+						goto retry_character;
 				}
 				break;
 		}
