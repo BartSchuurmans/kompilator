@@ -105,6 +105,8 @@ retry:
 							case ',': tok->type = token_type::COMMA; break;
 							case '/': tok->type = token_type::FORWARD_SLASH; break;
 							case '+': tok->type = token_type::PLUS; break;
+							default:
+								throw tokenize_error(state.line, state.pos, c);
 						}
 						tok = nullptr;
 						break;
