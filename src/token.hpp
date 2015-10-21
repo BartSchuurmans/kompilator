@@ -13,6 +13,7 @@
 	def(PLUS)	\
 	def(MINUS)	\
 	def(EQUALS)	\
+	def(NOT_EQUALS)	\
 	def(LESS_THAN)	\
 	def(LESS_THAN_EQUALS)	\
 	def(GREATER_THAN)	\
@@ -22,7 +23,12 @@
 	def(CURLY_BRACKET_OPEN)	\
 	def(CURLY_BRACKET_CLOSE)	\
 	def(SQUARE_BRACKET_OPEN)	\
-	def(SQUARE_BRACKET_CLOSE)
+	def(SQUARE_BRACKET_CLOSE)	\
+	def(AND)	\
+	def(OR)	\
+	def(IS)	\
+	def(NOT)	\
+	def(EMPTY_LIST)
 
 enum class token_type {
 	#define DEFINE_ENUM_TYPE(v) v,

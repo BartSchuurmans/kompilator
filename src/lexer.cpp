@@ -22,7 +22,6 @@ get_character_type(char c)
 		case ':':
 		case ';':
 		case '=':
-		case '[':
 		case ']':
 		case ',':
 		case '/':
@@ -31,6 +30,10 @@ get_character_type(char c)
 			return character_type::SINGLE_SYMBOL;
 		case '<':
 		case '>':
+		case '[':
+		case '&':
+		case '|':
+		case '!':
 			return character_type::MAYBE_MULTIPLE_SYMBOL;
 		case ' ':
 		case '\t':
@@ -155,29 +158,76 @@ retry_character:
 				assert(!tok->characters.empty());
 				switch(tok->characters.front()) {
 					case '<':
-						switch(c) {
-							case '=':
-								tok->type = token_type::LESS_THAN_EQUALS;
-								tok->add_character(c);
-								end_token();
-								break;
-							default:
-								tok->type = token_type::LESS_THAN;
-								end_token();
-								goto retry_character;
+						if(c == '=') {
+							tok->type = token_type::LESS_THAN_EQUALS;
+							tok->add_character(c);
+							end_token();
+						} else {
+							tok->type = token_type::LESS_THAN;
+							end_token();
+							goto retry_character;
 						}
 						break;
 					case '>':
-						switch(c) {
-							case '=':
-								tok->type = token_type::GREATER_THAN_EQUALS;
-								tok->add_character(c);
-								end_token();
-								break;
-							default:
-								tok->type = token_type::GREATER_THAN;
-								end_token();
-								goto retry_character;
+						if(c == '=') {
+							tok->type = token_type::GREATER_THAN_EQUALS;
+							tok->add_character(c);
+							end_token();
+						} else {
+							tok->type = token_type::GREATER_THAN;
+							end_token();
+							goto retry_character;
+						}
+						break;
+					case '&':
+						if(c == '&') {
+							tok->type = token_type::AND;
+							tok->add_character(c);
+							end_token();
+						} else {
+							throw tokenize_error(state.line, state.pos, c);
+						}
+						break;
+					case '|':
+						if(c == '|') {
+							tok->type = token_type::OR;
+							tok->add_character(c);
+							end_token();
+						} else {
+							throw tokenize_error(state.line, state.pos, c);
+						}
+						break;
+					case '!':
+						if(c == '=') {
+							tok->type = token_type::NOT_EQUALS;
+							tok->add_character(c);
+							end_token();
+						} else {
+							tok->type = token_type::NOT;
+							end_token();
+							goto retry_character;
+						}
+						break;
+					case '=':
+						if(c == '=') {
+							tok->type = token_type::EQUALS;
+							tok->add_character(c);
+							end_token();
+						} else {
+							tok->type = token_type::IS;
+							end_token();
+							goto retry_character;
+						}
+						break;
+					case '[':
+						if(c == ']') {
+							tok->type = token_type::EMPTY_LIST;
+							tok->add_character(c);
+							end_token();
+						} else {
+							tok->type = token_type::SQUARE_BRACKET_OPEN;
+							end_token();
+							goto retry_character;
 						}
 						break;
 					default:
