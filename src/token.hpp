@@ -2,6 +2,7 @@
 #include <vector>
 
 #define KOMPILATOR_TOKEN_TYPES(def)	\
+	def(UNKNOWN)	\
 	def(WHITESPACE)	\
 	def(WORD)	\
 	def(NUMBER)	\
@@ -32,7 +33,7 @@ enum class token_type {
 class token
 {
 public:
-	token_type type;
+	token_type type = token_type::UNKNOWN;
 	std::vector<char> characters;
 	int line;
 	int pos;
