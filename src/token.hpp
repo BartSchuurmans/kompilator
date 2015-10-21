@@ -9,9 +9,11 @@
 	def(SEMICOLON)	\
 	def(COLON)	\
 	def(COMMA)	\
-	def(FORWARD_SLASH)	\
 	def(PLUS)	\
 	def(MINUS)	\
+	def(MULTIPLY)	\
+	def(DIVIDE)	\
+	def(MODULO)	\
 	def(EQUALS)	\
 	def(NOT_EQUALS)	\
 	def(LESS_THAN)	\
