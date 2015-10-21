@@ -69,6 +69,10 @@ tokenize(std::istream &input)
 
 		character_type t = get_character_type(c);
 
+		#define END_TOKEN \
+			state.current_state = state_type::START; \
+			goto retry
+
 retry:
 		switch(state.current_state) {
 			case state_type::START:
@@ -120,8 +124,7 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						state.current_state = state_type::START;
-						goto retry;
+						END_TOKEN;
 				}
 				break;
 			case state_type::DIGIT:
@@ -130,8 +133,7 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						state.current_state = state_type::START;
-						goto retry;
+						END_TOKEN;
 				}
 				break;
 			case state_type::MAYBE_MULTIPLE_SYMBOL:
@@ -147,12 +149,10 @@ retry:
 								tok = nullptr;
 								break;
 							default:
-								state.current_state = state_type::START;
-								goto retry;
+								END_TOKEN;
 						}
 					default:
-						state.current_state = state_type::START;
-						goto retry;
+						END_TOKEN;
 				}
 				break;
 			case state_type::WHITESPACE:
@@ -161,8 +161,7 @@ retry:
 						tok->add_character(c);
 						break;
 					default:
-						state.current_state = state_type::START;
-						goto retry;
+						END_TOKEN;
 				}
 				break;
 		}
