@@ -143,20 +143,31 @@ retry:
 				}
 				break;
 			case state_type::MAYBE_MULTIPLE_SYMBOL:
-				switch(c) {
-					case '=':
-						switch(tok->characters.front()) {
-							case '<':
+				switch(tok->characters.front()) {
+					case '<':
+						switch(c) {
+							case '=':
 								tok->type = token_type::LESS_THAN_EQUALS;
-								tok = nullptr;
-								break;
-							case '>':
-								tok->type = token_type::GREATER_THAN_EQUALS;
+								tok->add_character(c);
 								tok = nullptr;
 								break;
 							default:
+								tok->type = token_type::LESS_THAN;
 								END_TOKEN;
 						}
+						break;
+					case '>':
+						switch(c) {
+							case '=':
+								tok->type = token_type::GREATER_THAN_EQUALS;
+								tok->add_character(c);
+								tok = nullptr;
+								break;
+							default:
+								tok->type = token_type::GREATER_THAN;
+								END_TOKEN;
+						}
+						break;
 					default:
 						END_TOKEN;
 				}
