@@ -42,7 +42,7 @@ bool
 lexer_state::get_character(char &c)
 {
 	input->get(c);
-	if(!input) {
+	if(!input->good()) {
 		return false;
 	}
 
