@@ -23,16 +23,16 @@ main(int argc, char *argv[])
 
 	std::ifstream source_file(argv[1], std::ifstream::in);
 
-	std::vector<token *> tokens;
+	std::vector<lexeme *> lexemes;
 	try {
-		tokens = tokenize(source_file);
-	} catch(const tokenize_error &e) {
+		lexemes = scan(source_file);
+	} catch(const scanner_error &e) {
 		std::cerr << e.what() << std::endl;
 		exit(1);
 	}
 
-	std::cout << "Tokens parsed:" << std::endl;
-	for(token *t : tokens) {
+	std::cout << "Lexemes scanned:" << std::endl;
+	for(lexeme *t : lexemes) {
 		std::cout << "'" << t->get_contents() << "'" << "\t(" << t->get_type_name() << ")" << std::endl;
 	}
 }

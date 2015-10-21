@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "token.hpp"
+#include "lexeme.hpp"
 
 enum class character_type {
 	UPPER_ALPHA,
@@ -38,14 +38,14 @@ public:
 	bool get_character(char &c);
 };
 
-class tokenize_error : std::exception {
+class scanner_error : std::exception {
 	int line;
 	int pos;
 	char c;
 	std::string msg;
 
 public:
-	tokenize_error(int line, int pos, char c)
+	scanner_error(int line, int pos, char c)
 	: line(line)
 	, pos(pos)
 	, c(c)
@@ -60,4 +60,4 @@ public:
 	}
 };
 
-std::vector<token *> tokenize(std::istream &input);
+std::vector<lexeme *> scan(std::istream &input);

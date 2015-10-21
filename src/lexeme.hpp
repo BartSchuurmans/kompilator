@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#define KOMPILATOR_TOKEN_TYPES(def)	\
+#define KOMPILATOR_LEXEME_TYPES(def)	\
 	def(UNKNOWN)	\
 	def(WHITESPACE)	\
 	def(WORD)	\
@@ -32,22 +32,22 @@
 	def(NOT)	\
 	def(EMPTY_LIST)
 
-enum class token_type {
+enum class lexeme_type {
 	#define DEFINE_ENUM_TYPE(v) v,
-	KOMPILATOR_TOKEN_TYPES(DEFINE_ENUM_TYPE)
+	KOMPILATOR_LEXEME_TYPES(DEFINE_ENUM_TYPE)
 	#undef DEFINE_ENUM_TYPE
 };
 
-class token
+class lexeme
 {
 public:
-	token_type type = token_type::UNKNOWN;
+	lexeme_type type = lexeme_type::UNKNOWN;
 	std::vector<char> characters;
 	int line;
 	int pos;
 
-	token(int line, int pos);
-	token(int line, int pos, char c);
+	lexeme(int line, int pos);
+	lexeme(int line, int pos, char c);
 
 	void add_character(char c);
 	std::string get_type_name();
