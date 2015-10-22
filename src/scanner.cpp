@@ -65,11 +65,11 @@ scanner_state::get_character(char &c)
 	return true;
 }
 
-std::vector<lexeme *>
+std::vector<lexeme>
 scan(std::istream &input)
 {
 	auto state = scanner_state(&input);
-	auto output = std::vector<lexeme *>();
+	auto output = std::vector<lexeme>();
 
 	char c;
 	lexeme *lme = nullptr;
@@ -85,9 +85,9 @@ scan(std::istream &input)
 
 retry_character:
 		if(state.current_state == state_type::START) {
-			// Start new lexeme with first character
-			lme = new lexeme(state.line, state.pos, c);
-			output.push_back(lme);
+			// Create new lexeme object containing first character
+			output.emplace_back(state.line, state.pos, c);
+			lme = &output.back();
 		} else {
 			assert(lme != nullptr);
 		}

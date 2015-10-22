@@ -60,4 +60,4 @@ public:
 	}
 };
 
-std::vector<lexeme *> scan(std::istream &input);
+std::vector<lexeme> scan(std::istream &input);

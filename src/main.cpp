@@ -23,7 +23,7 @@ main(int argc, char *argv[])
 
 	std::ifstream source_file(argv[1], std::ifstream::in);
 
-	std::vector<lexeme *> lexemes;
+	std::vector<lexeme> lexemes;
 	try {
 		lexemes = scan(source_file);
 	} catch(const scanner_error &e) {
@@ -32,7 +32,7 @@ main(int argc, char *argv[])
 	}
 
 	std::cout << "Lexemes scanned:" << std::endl;
-	for(lexeme *t : lexemes) {
-		std::cout << "'" << t->get_contents() << "'" << "\t(" << t->get_type_name() << ")" << std::endl;
+	for(auto &lme : lexemes) {
+		std::cout << "'" << lme.get_contents() << "'" << "\t(" << lme.get_type_name() << ")" << std::endl;
 	}
 }
