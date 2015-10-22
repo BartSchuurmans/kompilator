@@ -33,6 +33,9 @@ main(int argc, char *argv[])
 
 	std::cout << "Lexemes scanned:" << std::endl;
 	for(auto &lme : lexemes) {
+		if(lme.type == lexeme_type::WHITESPACE) {
+			continue;
+		}
 		std::cout << "'" << lme.get_contents() << "'" << "\t(" << lme.get_type_name() << ")" << std::endl;
 	}
 }
