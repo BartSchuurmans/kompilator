@@ -6,8 +6,7 @@
 #include "lexeme.hpp"
 
 enum class character_type {
-	UPPER_ALPHA,
-	LOWER_ALPHA,
+	ALPHA,
 	DIGIT,
 	SINGLE_SYMBOL,
 	MAYBE_MULTIPLE_SYMBOL,

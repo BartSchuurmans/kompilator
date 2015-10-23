@@ -5,11 +5,8 @@
 character_type
 get_character_type(char c)
 {
-	if(c >= 'A' && c <= 'Z') {
-		return character_type::UPPER_ALPHA;
-	}
-	if(c >= 'a' && c <= 'z') {
-		return character_type::LOWER_ALPHA;
+	if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+		return character_type::ALPHA;
 	}
 	if(c >= '0' && c <= '9') {
 		return character_type::DIGIT;
@@ -94,8 +91,7 @@ retry_character:
 		switch(state.current_state) {
 			case state_type::START:
 				switch(t) {
-					case character_type::LOWER_ALPHA:
-					case character_type::UPPER_ALPHA:
+					case character_type::ALPHA:
 						lme->type = lexeme_type::WORD;
 						state.current_state = state_type::WORD;
 						break;
@@ -136,8 +132,7 @@ retry_character:
 				break;
 			case state_type::WORD:
 				switch(t) {
-					case character_type::LOWER_ALPHA:
-					case character_type::UPPER_ALPHA:
+					case character_type::ALPHA:
 					case character_type::DIGIT:
 						lme->add_character(c);
 						break;
