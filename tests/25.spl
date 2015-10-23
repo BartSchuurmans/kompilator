@@ -1,0 +1,13 @@
+Void
+check(Int ret) {
+	if(ret != 0) {
+		print ret;
+	}
+}
+
+Int
+main() {
+	Int return_value = 0;
+	check(return_value);
+	return return_value;
+}
