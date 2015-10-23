@@ -53,8 +53,8 @@ public:
 	lexeme(int line, int pos, char c);
 
 	void add_character(char c);
-	std::string get_type_name();
-	std::string get_contents();
+	std::string get_type_name() const;
+	std::string get_contents() const;
 };
 
 #endif	// H_LEXEME

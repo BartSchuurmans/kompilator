@@ -21,13 +21,13 @@ lexeme::add_character(char c)
 }
 
 std::string
-lexeme::get_contents()
+lexeme::get_contents() const
 {
 	return std::string(characters.begin(), characters.end());
 }
 
 std::string
-lexeme::get_type_name()
+lexeme::get_type_name() const
 {
 	switch(type) {
 		#define DEFINE_SWITCH_CASE(v) case lexeme_type::v: return #v;
