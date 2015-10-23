@@ -1,5 +1,4 @@
-#ifndef H_LEXEME
-#define H_LEXEME
+#pragma once
 
 #include <string>
 #include <vector>
@@ -56,5 +55,3 @@ public:
 	std::string get_type_name() const;
 	std::string get_contents() const;
 };
-
-#endif	// H_LEXEME

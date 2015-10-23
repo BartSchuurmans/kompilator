@@ -1,5 +1,4 @@
-#ifndef H_EVALUATOR
-#define H_EVALUATOR
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -25,5 +24,3 @@ public:
 };
 
 std::vector<token> evaluate(std::vector<lexeme> const &lexemes);
-
-#endif	// H_EVALUATOR

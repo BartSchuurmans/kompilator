@@ -1,5 +1,4 @@
-#ifndef H_TOKEN
-#define H_TOKEN
+#pragma once
 
 #include <string>
 #include <vector>
@@ -75,5 +74,3 @@ public:
 	bool has_contents() const;
 	std::string get_contents() const;
 };
-
-#endif	// H_TOKEN
