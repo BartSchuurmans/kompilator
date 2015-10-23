@@ -14,6 +14,8 @@ evaluate(std::vector<lexeme> const &lexemes)
 					tokens.emplace_back(token_type::TYPE_INT, &lme);
 				} else if(contents == "Bool") {
 					tokens.emplace_back(token_type::TYPE_BOOL, &lme);
+				} else if(contents == "Void") {
+					tokens.emplace_back(token_type::TYPE_VOID, &lme);
 				} else if(contents == "if") {
 					tokens.emplace_back(token_type::IF, &lme);
 				} else if(contents == "else") {

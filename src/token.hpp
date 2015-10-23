@@ -37,6 +37,7 @@
 #define KOMPILATOR_WORD_EMPTY_TOKEN_TYPES(def)	\
 	def(TYPE_INT)	\
 	def(TYPE_BOOL)	\
+	def(TYPE_VOID)	\
 	def(IF)	\
 	def(ELSE)	\
 	def(WHILE)	\
