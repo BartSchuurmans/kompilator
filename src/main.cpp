@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "scanner.hpp"
+#include "evaluator.hpp"
 
 void
 usage(char *executable)
@@ -39,6 +40,28 @@ main(int argc, char *argv[])
 			continue;
 		}
 		std::cout << lme.get_type_name() + ": " + lme.get_contents() << std::endl;
+	}
+	std::cout << std::endl;
+
+	// Evaluator
+	std::vector<token> tokens;
+	try {
+		tokens = evaluate(lexemes);
+	} catch(const evaluator_error &e) {
+		std::cerr << e.what() << std::endl;
+		exit(1);
+	}
+
+	std::cout << "Tokens evaluated:" << std::endl;
+	for(auto &tok : tokens) {
+		if(tok.type == token_type::WHITESPACE) {
+			continue;
+		}
+		if(tok.has_contents()) {
+			std::cout << tok.get_type_name() + "(" + tok.get_contents() << ")" << std::endl;
+		} else {
+			std::cout << tok.get_type_name() << std::endl;
+		}
 	}
 	std::cout << std::endl;
 }
