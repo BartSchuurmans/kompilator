@@ -21,8 +21,10 @@ main(int argc, char *argv[])
 		usage(argv[0]);
 	}
 
+	// Open source file
 	std::ifstream source_file(argv[1], std::ifstream::in);
 
+	// Scanner
 	std::vector<lexeme> lexemes;
 	try {
 		lexemes = scan(source_file);
@@ -36,6 +38,7 @@ main(int argc, char *argv[])
 		if(lme.type == lexeme_type::WHITESPACE) {
 			continue;
 		}
-		std::cout << "'" << lme.get_contents() << "'" << "\t(" << lme.get_type_name() << ")" << std::endl;
+		std::cout << lme.get_type_name() + ": " + lme.get_contents() << std::endl;
 	}
+	std::cout << std::endl;
 }
