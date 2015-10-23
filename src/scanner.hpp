@@ -1,3 +1,6 @@
+#ifndef H_SCANNER
+#define H_SCANNER
+
 #include <iostream>
 #include <vector>
 
@@ -61,3 +64,5 @@ public:
 };
 
 std::vector<lexeme> scan(std::istream &input);
+
+#endif	// H_SCANNER

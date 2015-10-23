@@ -1,3 +1,6 @@
+#ifndef H_LEXEME
+#define H_LEXEME
+
 #include <string>
 #include <vector>
 
@@ -53,3 +56,5 @@ public:
 	std::string get_type_name();
 	std::string get_contents();
 };
+
+#endif	// H_LEXEME
