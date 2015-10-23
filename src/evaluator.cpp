@@ -45,6 +45,11 @@ evaluate(std::vector<lexeme> const &lexemes)
 			KOMPILATOR_IDENTICAL_EMPTY_TOKEN_TYPES(DEFINE_IDENTICAL_EMPTY_TOKEN_CASE)
 			#undef DEFINE_IDENTICAL_EMPTY_TOKEN_CASE
 
+			case lexeme_type::SINGLE_LINE_COMMENT:
+			case lexeme_type::MULTI_LINE_COMMENT:
+				tokens.emplace_back(token_type::COMMENT, &lme); \
+				break;
+
 			case lexeme_type::UNKNOWN:
 				throw evaluator_error(lme, "UNKNOWN lexeme passed to evaluator");
 		}

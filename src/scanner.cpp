@@ -23,7 +23,6 @@ get_character_type(char c)
 		case '+':
 		case '-':
 		case '*':
-		case '/':
 		case '%':
 			return character_type::SINGLE_SYMBOL;
 		case '=':
@@ -36,6 +35,8 @@ get_character_type(char c)
 			return character_type::MAYBE_MULTIPLE_SYMBOL;
 		case '_':
 			return character_type::UNDERSCORE;
+		case '/':
+			return character_type::FORWARD_SLASH;
 		case ' ':
 		case '\t':
 		case '\n':
@@ -117,12 +118,14 @@ retry_character:
 							case '+': lme->type = lexeme_type::PLUS; break;
 							case '-': lme->type = lexeme_type::MINUS; break;
 							case '*': lme->type = lexeme_type::MULTIPLY; break;
-							case '/': lme->type = lexeme_type::DIVIDE; break;
 							case '%': lme->type = lexeme_type::MODULO; break;
 							default:
 								throw scanner_error(state.line, state.pos, c);
 						}
 						end_lexeme();
+						break;
+					case character_type::FORWARD_SLASH:
+						state.current_state = state_type::MAYBE_COMMENT;
 						break;
 					case character_type::WHITESPACE:
 						lme->type = lexeme_type::WHITESPACE;
@@ -234,6 +237,38 @@ retry_character:
 					default:
 						end_lexeme();
 						goto retry_character;
+				}
+				break;
+			case state_type::MAYBE_COMMENT:
+				switch(c) {
+					case '/':
+						state.current_state = state_type::SINGLE_LINE_COMMENT;
+						lme->type = lexeme_type::SINGLE_LINE_COMMENT;
+						lme->add_character(c);
+						break;
+					case '*':
+						state.current_state = state_type::MULTI_LINE_COMMENT;
+						lme->type = lexeme_type::MULTI_LINE_COMMENT;
+						lme->add_character(c);
+						break;
+					default:
+						lme->type = lexeme_type::DIVIDE;
+						end_lexeme();
+						goto retry_character;
+				}
+				break;
+			case state_type::SINGLE_LINE_COMMENT:
+				lme->add_character(c);
+				if(c == '\n') {
+					end_lexeme();
+				}
+				break;
+			case state_type::MULTI_LINE_COMMENT:
+				if(c == '/' && lme->characters.back() == '*') {
+					lme->add_character(c);
+					end_lexeme();
+				} else {
+					lme->add_character(c);
 				}
 				break;
 			case state_type::WHITESPACE:

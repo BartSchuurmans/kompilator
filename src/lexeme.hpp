@@ -32,7 +32,9 @@
 	def(OR)	\
 	def(IS)	\
 	def(NOT)	\
-	def(EMPTY_LIST)
+	def(EMPTY_LIST)	\
+	def(SINGLE_LINE_COMMENT)	\
+	def(MULTI_LINE_COMMENT)
 
 enum class lexeme_type {
 	#define DEFINE_ENUM_TYPE(v) v,
