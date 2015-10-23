@@ -1,5 +1,9 @@
+/**
+ * Prints the return value if it is non-zero
+ */
 Void
 check(Int ret) {
+	/* This is a multi-line comment on a single line */
 	if(ret != 0) {
 		print ret;
 	}
@@ -8,6 +12,9 @@ check(Int ret) {
 Int
 main() {
 	Int return_value = 0;
+
+	// Check return value before returning
 	check(return_value);
+
 	return return_value;
 }
