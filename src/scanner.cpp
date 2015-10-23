@@ -34,6 +34,8 @@ get_character_type(char c)
 		case '|':
 		case '!':
 			return character_type::MAYBE_MULTIPLE_SYMBOL;
+		case '_':
+			return character_type::UNDERSCORE;
 		case ' ':
 		case '\t':
 		case '\n':
@@ -126,6 +128,7 @@ retry_character:
 						lme->type = lexeme_type::WHITESPACE;
 						state.current_state = state_type::WHITESPACE;
 						break;
+					case character_type::UNDERSCORE:
 					case character_type::OTHER:
 						throw scanner_error(state.line, state.pos, c);
 				}
@@ -134,6 +137,7 @@ retry_character:
 				switch(t) {
 					case character_type::ALPHA:
 					case character_type::DIGIT:
+					case character_type::UNDERSCORE:
 						lme->add_character(c);
 						break;
 					default:

@@ -10,6 +10,7 @@ enum class character_type {
 	DIGIT,
 	SINGLE_SYMBOL,
 	MAYBE_MULTIPLE_SYMBOL,
+	UNDERSCORE,
 	WHITESPACE,
 	OTHER,
 };
