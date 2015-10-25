@@ -2,6 +2,16 @@
 
 #include "token.hpp"
 
+token_type
+get_token_type_by_name(const std::string &name)
+{
+	try {
+		return token_types_by_name.at(name);
+	} catch(const std::out_of_range &e) {
+		throw std::runtime_error("Non-existent token: " + name);
+	}
+}
+
 token::token(token_type type, const lexeme *lme)
 	: type(type)
 	, lme(lme)

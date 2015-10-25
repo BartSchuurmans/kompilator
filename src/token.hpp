@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "lexeme.hpp"
 
@@ -57,6 +58,13 @@ enum class token_type {
 	KOMPILATOR_TOKEN_TYPES(DEFINE_ENUM_TYPE)
 	#undef DEFINE_ENUM_TYPE
 };
+
+const std::map<std::string, token_type> token_types_by_name = {
+	#define DEFINE_CONVERSION(v) { #v, token_type::v },
+	KOMPILATOR_TOKEN_TYPES(DEFINE_CONVERSION)
+	#undef DEFINE_CONVERSION
+};
+token_type get_token_type_by_name(const std::string &name);
 
 class token
 {
