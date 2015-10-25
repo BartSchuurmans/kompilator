@@ -1,0 +1,51 @@
+Program = $Declaration+
+Declaration = $VariableDeclaration
+            | $FunctionDeclaration
+VariableDeclaration = $Type IDENTIFIER IS $Expression SEMICOLON
+FunctionDeclaration = $ReturnType IDENTIFIER ROUND_BRACKET_OPEN $FunctionArguments? ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN $VariableDeclaration* $Statement+ CURLY_BRACKET_CLOSE
+ReturnType = $Type
+           | TYPE_VOID
+Type = TYPE_INT
+     | TYPE_BOOL
+     | ROUND_BRACKET_OPEN $Type COMMA $Type ROUND_BRACKET_CLOSE
+     | SQUARE_BRACKET_OPEN $Type SQUARE_BRACKET_CLOSE
+     | IDENTIFIER
+FunctionArguments = $FunctionArgument $NextFunctionArgument*
+FunctionArgument = $Type IDENTIFIER
+NextFunctionArgument = COMMA $FunctionArgument
+Statement = CURLY_BRACKET_OPEN $Statement* CURLY_BRACKET_CLOSE
+          | IF ROUND_BRACKET_OPEN $Expression ROUND_BRACKET_CLOSE $Statement $ElseStatement?
+          | WHILE ROUND_BRACKET_OPEN $Expression ROUND_BRACKET_CLOSE $Statement
+          | IDENTIFIER IS $Expression SEMICOLON
+          | $FunctionCall SEMICOLON
+          | RETURN $Expression SEMICOLON
+ElseStatement = ELSE $Statement
+Expression = IDENTIFIER
+           | $Expression $BinaryOperator $Expression
+           | $UnaryOperator $Expression
+           | INTEGER
+           | FALSE
+           | TRUE
+           | ROUND_BRACKET_OPEN $Expression ROUND_BRACKET_CLOSE
+           | $FunctionCall
+           | EMPTY_LIST
+           | ROUND_BRACKET_OPEN $Expression COMMA $Expression ROUND_BRACKET_CLOSE
+FunctionCall = IDENTIFIER ROUND_BRACKET_OPEN $FunctionCallArguments? ROUND_BRACKET_CLOSE
+FunctionCallArguments = $Expression $NextFunctionCallArgument*
+NextFunctionCallArgument = COMMA $Expression
+BinaryOperator = PLUS
+               | MINUS
+               | MULTIPLY
+               | DIVIDE
+               | MODULO
+               | EQUALS
+               | LESS_THAN
+               | GREATER_THAN
+               | LESS_THAN_EQUALS
+               | GREATER_THAN_EQUALS
+               | NOT_EQUALS
+               | AND
+               | OR
+               | COLON
+UnaryOperator = NOT
+              | MINUS
