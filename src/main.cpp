@@ -7,23 +7,25 @@
 
 #include "scanner.hpp"
 #include "evaluator.hpp"
+#include "grammar.hpp"
 
 void
 usage(char *executable)
 {
-	std::cerr << "Usage: " << executable << " <sourceFile>" << std::endl;
+	std::cerr << "Usage: " << executable << " <grammarFile> <sourceFile>" << std::endl;
 	exit(EX_USAGE);
 }
 
 int
 main(int argc, char *argv[])
 {
-	if(argc != 2) {
+	if(argc != 3) {
 		usage(argv[0]);
 	}
 
-	// Open source file
-	std::ifstream source_file(argv[1], std::ifstream::in);
+	// Open files
+	std::ifstream grammar_file(argv[1], std::ifstream::in);
+	std::ifstream source_file(argv[2], std::ifstream::in);
 
 	// Scanner
 	std::vector<lexeme> lexemes;
@@ -64,4 +66,13 @@ main(int argc, char *argv[])
 		}
 	}
 	std::cout << std::endl;
+
+	// Grammar
+	grammar gr;
+	try {
+		gr = parse_grammar_definition(grammar_file);
+	} catch(const std::runtime_error &e) {
+		std::cerr << e.what() << std::endl;
+		exit(1);
+	}
 }

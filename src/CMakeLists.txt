@@ -1,3 +1,6 @@
 set(CMAKE_CXX_STANDARD 11)
-list(APPEND CMAKE_CXX_FLAGS "-Wall -Wno-unused-private-field")
-add_executable(kompilator main.cpp lexeme.cpp scanner.cpp token.cpp evaluator.cpp)
+list(APPEND CMAKE_CXX_FLAGS "-Wall -Wno-unused-private-field -Wno-unused-local-typedef")
+find_package(Boost REQUIRED COMPONENTS)
+include_directories(${Boost_INCLUDE_DIR})
+add_executable(kompilator main.cpp lexeme.cpp scanner.cpp token.cpp evaluator.cpp grammar.cpp)
+target_link_libraries(kompilator ${Boost_LIBRARIES})
