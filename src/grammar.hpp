@@ -9,10 +9,11 @@
 class grammar_rule_part {
 public:
 	boost::variant<class grammar_rule *, token_type> contents;
-	int min_occurs;
-	int max_occurs;
+	bool at_least_once;
+	bool at_most_once;
 
-	grammar_rule_part(boost::variant<grammar_rule *, token_type> c, int min, int max);
+	grammar_rule_part(boost::variant<grammar_rule *, token_type> c, bool at_least_once, bool at_most_once);
+	grammar_rule_part(boost::variant<grammar_rule *, token_type> c);
 };
 
 class grammar_rule_option {

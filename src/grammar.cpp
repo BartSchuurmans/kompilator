@@ -7,10 +7,15 @@
 
 #include "grammar.hpp"
 
-grammar_rule_part::grammar_rule_part(boost::variant<grammar_rule *, token_type> c, int min, int max)
+grammar_rule_part::grammar_rule_part(boost::variant<grammar_rule *, token_type> c, bool at_least_once, bool at_most_once)
 	: contents(c)
-	, min_occurs(min)
-	, max_occurs(max)
+	, at_least_once(at_least_once)
+	, at_most_once(at_most_once)
+{
+}
+
+grammar_rule_part::grammar_rule_part(boost::variant<grammar_rule *, token_type> c)
+	: grammar_rule_part(c, true, true)
 {
 }
 
@@ -50,17 +55,17 @@ parse_rule_option(grammar &gr, const std::string &str)
 		if(std::regex_match(part, m, rule_part)) {
 			auto rule = gr.get_rule_by_name(m[1]);
 			if(m[2] == "?") {
-				option.parts.emplace_back(rule, 0, 1);
+				option.parts.emplace_back(rule, false, true);
 			} else if(m[2] == "*") {
-				option.parts.emplace_back(rule, 0, -1);
+				option.parts.emplace_back(rule, false, false);
 			} else if(m[2] == "+") {
-				option.parts.emplace_back(rule, 1, -1);
+				option.parts.emplace_back(rule, true, false);
 			} else {
-				option.parts.emplace_back(rule, 1, 1);
+				option.parts.emplace_back(rule, true, true);
 			}
 		} else if(std::regex_match(part, m, token_part)) {
 			auto token_type = get_token_type_by_name(m[1]);
-			option.parts.emplace_back(token_type, 1, 1);
+			option.parts.emplace_back(token_type);
 		} else {
 			throw std::runtime_error("Unable to parse option part: " + part);
 		}
@@ -114,7 +119,7 @@ operator<<(std::ostream& str, const grammar &gr)
 std::ostream&
 operator<<(std::ostream& str, const grammar_rule &rule)
 {
-	str << rule.name << std::endl;
+	str << rule.name << ":" << std::endl;
 	for(auto const &option : rule.options) {
 		str << "-" << option << std::endl;
 	}
@@ -138,7 +143,7 @@ operator<<(std::ostream& str, const grammar_rule_part &part)
 	} else {
 		// TODO: min/max
 		auto rule = boost::get<grammar_rule *>(part.contents);
-		str << rule->name;
+		str << "$" << rule->name;
 	}
 	return str;
 }
