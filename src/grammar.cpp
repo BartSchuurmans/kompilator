@@ -141,9 +141,17 @@ operator<<(std::ostream& str, const grammar_rule_part &part)
 	if(part.contents.type() == typeid(token_type)) {
 		str << get_token_type_name(boost::get<token_type>(part.contents));
 	} else {
-		// TODO: min/max
 		auto rule = boost::get<grammar_rule *>(part.contents);
 		str << "$" << rule->name;
+	}
+	if(part.at_least_once && part.at_most_once) {
+		// No suffix
+	} else if(part.at_least_once) {
+		str << "+";
+	} else if(part.at_most_once) {
+		str << "?";
+	} else {
+		str << "*";
 	}
 	return str;
 }
