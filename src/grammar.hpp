@@ -29,10 +29,15 @@ public:
 };
 
 class grammar {
+public:
 	std::map<std::string, grammar_rule> rules;
 
-public:
 	grammar_rule * get_rule_by_name(const std::string &name, bool create = true);
 };
 
 grammar parse_grammar_definition(std::istream &input);
+
+std::ostream& operator<<(std::ostream& str, const grammar &gr);
+std::ostream& operator<<(std::ostream& str, const grammar_rule &rule);
+std::ostream& operator<<(std::ostream& str, const grammar_rule_option &option);
+std::ostream& operator<<(std::ostream& str, const grammar_rule_part &part);

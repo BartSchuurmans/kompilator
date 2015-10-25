@@ -100,3 +100,45 @@ parse_grammar_definition(std::istream &input)
 
 	return gr;
 }
+
+std::ostream&
+operator<<(std::ostream& str, const grammar &gr)
+{
+	for(auto const &it : gr.rules) {
+		auto rule = it.second;
+		str << rule << std::endl;
+	}
+	return str;
+}
+
+std::ostream&
+operator<<(std::ostream& str, const grammar_rule &rule)
+{
+	str << rule.name << std::endl;
+	for(auto const &option : rule.options) {
+		str << "-" << option << std::endl;
+	}
+	return str;
+}
+
+std::ostream&
+operator<<(std::ostream& str, const grammar_rule_option &option)
+{
+	for(auto const &part : option.parts) {
+		str << " " << part;
+	}
+	return str;
+}
+
+std::ostream&
+operator<<(std::ostream& str, const grammar_rule_part &part)
+{
+	if(part.contents.type() == typeid(token_type)) {
+		str << get_token_type_name(boost::get<token_type>(part.contents));
+	} else {
+		// TODO: min/max
+		auto rule = boost::get<grammar_rule *>(part.contents);
+		str << rule->name;
+	}
+	return str;
+}

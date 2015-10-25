@@ -75,4 +75,6 @@ main(int argc, char *argv[])
 		std::cerr << e.what() << std::endl;
 		exit(1);
 	}
+
+	std::cout << "Grammar:" << std::endl << gr << std::endl;
 }

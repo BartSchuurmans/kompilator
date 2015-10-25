@@ -66,6 +66,8 @@ const std::map<std::string, token_type> token_types_by_name = {
 };
 token_type get_token_type_by_name(const std::string &name);
 
+std::string get_token_type_name(token_type type);
+
 class token
 {
 public:

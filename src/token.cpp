@@ -21,6 +21,12 @@ token::token(token_type type, const lexeme *lme)
 std::string
 token::get_type_name() const
 {
+	return get_token_type_name(type);
+}
+
+std::string
+get_token_type_name(token_type type)
+{
 	switch(type) {
 		#define DEFINE_SWITCH_CASE(v) case token_type::v: return #v;
 		KOMPILATOR_TOKEN_TYPES(DEFINE_SWITCH_CASE)
