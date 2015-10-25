@@ -20,14 +20,14 @@ grammar_rule::grammar_rule(const std::string &name)
 }
 
 grammar_rule *
-grammar::get_rule_by_name(const std::string &name, bool create /*  = true */)
+grammar::get_rule_by_name(const std::string &name, bool create_if_not_exists /*  = true */)
 {
 	auto search = rules.find(name);
 	if(search != rules.end()) {
 		// Already exists
 		return &search->second;
 	}
-	if(!create) {
+	if(!create_if_not_exists) {
 		return nullptr;
 	}
 

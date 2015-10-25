@@ -32,7 +32,7 @@ class grammar {
 public:
 	std::map<std::string, grammar_rule> rules;
 
-	grammar_rule * get_rule_by_name(const std::string &name, bool create = true);
+	grammar_rule * get_rule_by_name(const std::string &name, bool create_if_not_exists = true);
 };
 
 grammar parse_grammar_definition(std::istream &input);
