@@ -84,7 +84,7 @@ parse_grammar_definition(std::istream &input)
 
 	std::string line;
 	grammar_rule *current = nullptr;
-	while(std::getline(input, line).good()) {
+	while(std::getline(input, line)) {
 		std::smatch m;
 		if(std::regex_match(line, m, rule)) {
 			// New rule
