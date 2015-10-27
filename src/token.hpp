@@ -8,7 +8,6 @@
 
 // Tokens that have a single lexeme_type with the same name and discard the character contents
 #define KOMPILATOR_IDENTICAL_EMPTY_TOKEN_TYPES(def)	\
-	def(WHITESPACE)	\
 	def(SEMICOLON)	\
 	def(COLON)	\
 	def(COMMA)	\
@@ -47,6 +46,7 @@
 	def(FALSE)	\
 	def(IDENTIFIER)	\
 	def(INTEGER)	\
+	def(WHITESPACE)	\
 	def(COMMENT)
 
 #define KOMPILATOR_TOKEN_TYPES(def)	\
