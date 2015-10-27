@@ -47,7 +47,7 @@ evaluate(std::vector<lexeme> const &lexemes)
 
 			case lexeme_type::SINGLE_LINE_COMMENT:
 			case lexeme_type::MULTI_LINE_COMMENT:
-				tokens.emplace_back(token_type::COMMENT, &lme); \
+				tokens.emplace_back(token_type::COMMENT, &lme);
 				break;
 
 			case lexeme_type::UNKNOWN:
