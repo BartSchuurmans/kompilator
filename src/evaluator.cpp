@@ -46,12 +46,9 @@ evaluate(std::vector<lexeme> const &lexemes)
 			#undef DEFINE_IDENTICAL_EMPTY_TOKEN_CASE
 
 			case lexeme_type::WHITESPACE:
-				tokens.emplace_back(token_type::WHITESPACE, &lme);
-				break;
-
 			case lexeme_type::SINGLE_LINE_COMMENT:
 			case lexeme_type::MULTI_LINE_COMMENT:
-				tokens.emplace_back(token_type::COMMENT, &lme);
+				// Lexemes are discarded
 				break;
 
 			case lexeme_type::UNKNOWN:
