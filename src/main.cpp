@@ -8,6 +8,7 @@
 #include "scanner.hpp"
 #include "evaluator.hpp"
 #include "grammar.hpp"
+#include "parser.hpp"
 
 void
 usage(char *executable)
@@ -77,4 +78,8 @@ main(int argc, char *argv[])
 	}
 
 	std::cout << "Grammar:" << std::endl << gr << std::endl;
+
+	// Parser
+	auto root = gr.get_rule_by_name("Program", false);
+	parse(tokens, root);
 }
