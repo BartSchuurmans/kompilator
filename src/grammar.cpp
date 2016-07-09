@@ -19,6 +19,30 @@ grammar_rule_part::grammar_rule_part(boost::variant<grammar_rule *, token_type> 
 {
 }
 
+bool
+grammar_rule_part::is_rule() const
+{
+	return (contents.type() == typeid(grammar_rule *));
+}
+
+grammar_rule *
+grammar_rule_part::get_rule() const
+{
+	return boost::get<grammar_rule *>(contents);
+}
+
+bool
+grammar_rule_part::is_token_type() const
+{
+	return (contents.type() == typeid(grammar_rule *));
+}
+
+token_type
+grammar_rule_part::get_token_type() const
+{
+	return boost::get<token_type>(contents);
+}
+
 grammar_rule::grammar_rule(const std::string &name)
 	: name(name)
 {
@@ -138,11 +162,10 @@ operator<<(std::ostream& str, const grammar_rule_option &option)
 std::ostream&
 operator<<(std::ostream& str, const grammar_rule_part &part)
 {
-	if(part.contents.type() == typeid(token_type)) {
-		str << get_token_type_name(boost::get<token_type>(part.contents));
+	if(part.is_rule()) {
+		str << "$" << part.get_rule()->name;
 	} else {
-		auto rule = boost::get<grammar_rule *>(part.contents);
-		str << "$" << rule->name;
+		str << get_token_type_name(part.get_token_type());
 	}
 	if(part.at_least_once && part.at_most_once) {
 		// No suffix

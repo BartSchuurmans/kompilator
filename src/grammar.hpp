@@ -14,6 +14,10 @@ public:
 
 	grammar_rule_part(boost::variant<grammar_rule *, token_type> c, bool at_least_once, bool at_most_once);
 	grammar_rule_part(boost::variant<grammar_rule *, token_type> c);
+	bool is_rule() const;
+	grammar_rule * get_rule() const;
+	bool is_token_type() const;
+	token_type get_token_type() const;
 };
 
 class grammar_rule_option {
